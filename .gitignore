@@ -1,0 +1,27 @@
+# Secret keys - NEVER upload these
+.env
+groq_key.txt
+
+# Virtual environment - too large to upload
+.venv/
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# Large data files (optional - remove if you want data uploaded)
+data/*.xlsx
+data/*.csv
+
