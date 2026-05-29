@@ -1,27 +1,34 @@
-# Secret keys - NEVER upload these
+# Secret keys
 .env
 groq_key.txt
 
-# Virtual environment - too large to upload
+# Virtual environment
 .venv/
 venv/
 
-# Python cache files
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 
-# Jupyter notebooks checkpoints
+# Jupyter
 .ipynb_checkpoints/
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# VS Code settings
+# VS Code
 .vscode/
 
-# Large data files (optional - remove if you want data uploaded)
-data/*.xlsx
-data/*.csv
+# ALL DATA FILES - Do not upload
+data/
+*.csv
+*.xlsx
+*.xls
 
+# ML Models
+models/
+
+# Reports
+reports/
