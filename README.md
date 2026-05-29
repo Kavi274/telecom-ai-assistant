@@ -13,7 +13,12 @@ TelecomAI Assistant is a complete data-driven web application that helps telecom
 
 ## 🚀 Live Demo
 
-**Application:** Runs locally at `http://localhost:8501`
+This application runs locally on your machine.
+Follow the **Installation & Setup** section below to run it.
+
+> **Note:** This is a locally hosted application.
+> Clone the repository, install dependencies, add your
+> Groq API key, and run `streamlit run app.py` to launch.
 
 ## 🛠️ Tech Stack
 
