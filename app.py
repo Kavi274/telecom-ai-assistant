@@ -740,108 +740,97 @@ elif page == "🤖 AI Chat Assistant":
     st.markdown('<div class="main-header">🤖 AI Chat Assistant</div>',
                 unsafe_allow_html=True)
     st.markdown(
-        '<div class="sub-header">Powered by Llama 3 via Groq — Free & Fast</div>',
+        '<div class="sub-header">Powered by Llama 3 via Groq — Answers from your real datasets only</div>',
         unsafe_allow_html=True)
 
-    # ── Dataset context for the AI ────────────────────
+    # ── Dataset context for AI ────────────────────────
     s = ALL_STATS
     system_prompt = f"""You are TelecomAI, an expert telecom business analyst.
-You have access to REAL data from 9 telecom dataset files across 2 datasets.
+You ONLY answer using the company datasets listed below.
+NEVER mention IBM dataset or Kaggle dataset in any response.
+NEVER mention churn rate from IBM data.
+Always state which file you are using at the start of your answer.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 1 — IBM TELCO CHURN (7,043 customers)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Customers        : {TOTAL:,}
-- Churn Rate             : {CHURN_RATE:.1f}%
-- Monthly Revenue        : ${TOTAL_REV:,.0f}
-- Avg Monthly Charge     : ${AVG_CHARGE:.2f}
-- Month-to-Month Churn   : {MTM_CHURN:.1f}%
-- Fiber Optic Churn      : {FIBER_CHURN:.1f}%
-- Two-Year Contract Churn: {TWO_YR_CHURN:.1f}%
+DATASET 1 - BUNDLE PURCHASES (May 1-9 2026)
+File: Bundle_Purchases_0501-0510.xlsx
+- Total Purchases   : {s.get('bundle_new',{}).get('total_purchases',0):,}
+- Unique Customers  : {s.get('bundle_new',{}).get('unique_customers',0):,}
+- Total Revenue     : ${s.get('bundle_new',{}).get('total_revenue',0):,.2f}
+- Average Charge    : ${s.get('bundle_new',{}).get('avg_charge',0):.2f}
+- Top Bundle        : {s.get('bundle_new',{}).get('top_bundle','N/A')}
+- Top Bundle Count  : {s.get('bundle_new',{}).get('top_bundle_count',0):,}
+- Bundles by count  : {s.get('bundle_new',{}).get('top_bundles',{})}
+- Revenue by bundle : {s.get('bundle_new',{}).get('revenue_by_bundle',{})}
+- Channels          : {s.get('bundle_new',{}).get('channels',{})}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 2 — BUNDLE PURCHASES MAY 2026 (NEW_DATA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Purchases        : {s.get('bundle_new',{}).get('total_purchases',0):,}
-- Unique Customers       : {s.get('bundle_new',{}).get('unique_customers',0):,}
-- Total Revenue          : ${s.get('bundle_new',{}).get('total_revenue',0):,.2f}
-- Avg Purchase Charge    : ${s.get('bundle_new',{}).get('avg_charge',0):.2f}
-- Date Range             : {s.get('bundle_new',{}).get('date_range','N/A')}
-- Top Bundle             : {s.get('bundle_new',{}).get('top_bundle','N/A')} ({s.get('bundle_new',{}).get('top_bundle_count',0):,} purchases)
-- Top Bundles by count   : {s.get('bundle_new',{}).get('top_bundles',{})}
-- Revenue by bundle      : {s.get('bundle_new',{}).get('revenue_by_bundle',{})}
-- Purchase Channels      : {s.get('bundle_new',{}).get('channels',{})}
+DATASET 2 - ADDON SUBSCRIPTIONS (May 5 2026)
+File: ADDON_SUBSCRIPTION_REPORT.csv
+- Total Records     : {s.get('addon',{}).get('total_records',0):,}
+- Unique Customers  : {s.get('addon',{}).get('unique_customers',0):,}
+- Total Revenue     : ${s.get('addon',{}).get('total_revenue',0):,.2f}
+- Average Charge    : ${s.get('addon',{}).get('avg_charge',0):.2f}
+- Top Bundle        : {s.get('addon',{}).get('top_bundle','N/A')}
+- Bundles by count  : {s.get('addon',{}).get('top_bundles',{})}
+- Revenue by bundle : {s.get('addon',{}).get('revenue_by_bundle',{})}
+- Channels          : {s.get('addon',{}).get('channels',{})}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 3 — ADDON SUBSCRIPTIONS MAY 2026 (TELCO_DATA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Records          : {s.get('addon',{}).get('total_records',0):,}
-- Unique Customers       : {s.get('addon',{}).get('unique_customers',0):,}
-- Total Revenue          : ${s.get('addon',{}).get('total_revenue',0):,.2f}
-- Avg Charge             : ${s.get('addon',{}).get('avg_charge',0):.2f}
-- Top Bundle             : {s.get('addon',{}).get('top_bundle','N/A')}
-- Bundle breakdown       : {s.get('addon',{}).get('top_bundles',{})}
-- Revenue by bundle      : {s.get('addon',{}).get('revenue_by_bundle',{})}
-- Channels               : {s.get('addon',{}).get('channels',{})}
+DATASET 3 - DATA USAGE NOVEMBER 2025
+File: MSISDN_DATAusage_November2025.xlsx
+- Total Customers   : {s.get('nov_usage',{}).get('total_customers',0):,}
+- Total Usage GB    : {s.get('nov_usage',{}).get('total_usage_gb',0):,.2f} GB
+- Avg Usage/Customer: {s.get('nov_usage',{}).get('avg_usage_gb',0):.2f} GB
+- Max Usage         : {s.get('nov_usage',{}).get('max_usage_gb',0):.2f} GB
+- Facebook          : {s.get('nov_usage',{}).get('facebook_gb',0):,.2f} GB
+- YouTube           : {s.get('nov_usage',{}).get('youtube_gb',0):,.2f} GB
+- TikTok            : {s.get('nov_usage',{}).get('tiktok_gb',0):,.2f} GB
+- Netflix           : {s.get('nov_usage',{}).get('netflix_gb',0):,.2f} GB
+- Gaming PUBG       : {s.get('nov_usage',{}).get('gaming_gb',0):,.2f} GB
+- WhatsApp          : {s.get('nov_usage',{}).get('whatsapp_gb',0):,.2f} GB
+- Instagram         : {s.get('nov_usage',{}).get('instagram_gb',0):,.2f} GB
+- General Traffic   : {s.get('nov_usage',{}).get('general_gb',0):,.2f} GB
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 4 — DATA USAGE NOVEMBER 2025 (TELCO_DATA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Customers        : {s.get('nov_usage',{}).get('total_customers',0):,}
-- Total Data Usage       : {s.get('nov_usage',{}).get('total_usage_gb',0):,.2f} GB
-- Avg Usage Per Customer : {s.get('nov_usage',{}).get('avg_usage_gb',0):.2f} GB
-- Max Usage (single cust): {s.get('nov_usage',{}).get('max_usage_gb',0):.2f} GB
-- Facebook usage         : {s.get('nov_usage',{}).get('facebook_gb',0):,.2f} GB
-- YouTube usage          : {s.get('nov_usage',{}).get('youtube_gb',0):,.2f} GB
-- TikTok usage           : {s.get('nov_usage',{}).get('tiktok_gb',0):,.2f} GB
-- Netflix usage          : {s.get('nov_usage',{}).get('netflix_gb',0):,.2f} GB
-- Gaming (PUBG) usage    : {s.get('nov_usage',{}).get('gaming_gb',0):,.2f} GB
-- WhatsApp usage         : {s.get('nov_usage',{}).get('whatsapp_gb',0):,.2f} GB
-- Instagram usage        : {s.get('nov_usage',{}).get('instagram_gb',0):,.2f} GB
-- General Traffic        : {s.get('nov_usage',{}).get('general_gb',0):,.2f} GB
+DATASET 4 - DATA USAGE OCTOBER 2025
+File: MSISDN_DATAusage_October2025.xlsx
+- Total Customers   : {s.get('oct_usage',{}).get('total_customers',0):,}
+- Total Usage GB    : {s.get('oct_usage',{}).get('total_usage_gb',0):,.2f} GB
+- Avg Usage/Customer: {s.get('oct_usage',{}).get('avg_usage_gb',0):.2f} GB
+- Facebook          : {s.get('oct_usage',{}).get('facebook_gb',0):,.2f} GB
+- YouTube           : {s.get('oct_usage',{}).get('youtube_gb',0):,.2f} GB
+- TikTok            : {s.get('oct_usage',{}).get('tiktok_gb',0):,.2f} GB
+- Gaming PUBG       : {s.get('oct_usage',{}).get('gaming_gb',0):,.2f} GB
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 5 — DATA USAGE OCTOBER 2025 (TELCO_DATA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Customers        : {s.get('oct_usage',{}).get('total_customers',0):,}
-- Total Data Usage       : {s.get('oct_usage',{}).get('total_usage_gb',0):,.2f} GB
-- Avg Usage Per Customer : {s.get('oct_usage',{}).get('avg_usage_gb',0):.2f} GB
-- Facebook usage         : {s.get('oct_usage',{}).get('facebook_gb',0):,.2f} GB
-- YouTube usage          : {s.get('oct_usage',{}).get('youtube_gb',0):,.2f} GB
-- TikTok usage           : {s.get('oct_usage',{}).get('tiktok_gb',0):,.2f} GB
+DATASET 5 - POSTPAID NOVEMBER 2025
+File: MSISDN_Postpaid_November2025.xlsx
+- Total Customers   : {s.get('postpaid_nov',{}).get('total_customers',0):,}
+- Total Usage GB    : {s.get('postpaid_nov',{}).get('total_usage_gb',0):,.2f} GB
+- Avg Usage/Customer: {s.get('postpaid_nov',{}).get('avg_usage_gb',0):.2f} GB
+- Max Usage         : {s.get('postpaid_nov',{}).get('max_usage_gb',0):.2f} GB
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 6 — POSTPAID NOVEMBER 2025 (TELCO_DATA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Postpaid Customers: {s.get('postpaid_nov',{}).get('total_customers',0):,}
-- Total Usage             : {s.get('postpaid_nov',{}).get('total_usage_gb',0):,.2f} GB
-- Avg Usage Per Customer  : {s.get('postpaid_nov',{}).get('avg_usage_gb',0):.2f} GB
-- Max Single Customer     : {s.get('postpaid_nov',{}).get('max_usage_gb',0):.2f} GB
+DATASET 6 - POSTPAID OCTOBER 2025
+File: MSISDN_Postpaid_October2025.xlsx
+- Total Customers   : {s.get('postpaid_oct',{}).get('total_customers',0):,}
+- Total Usage GB    : {s.get('postpaid_oct',{}).get('total_usage_gb',0):,.2f} GB
+- Avg Usage/Customer: {s.get('postpaid_oct',{}).get('avg_usage_gb',0):.2f} GB
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 7 — POSTPAID OCTOBER 2025 (TELCO_DATA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Postpaid Customers: {s.get('postpaid_oct',{}).get('total_customers',0):,}
-- Total Usage             : {s.get('postpaid_oct',{}).get('total_usage_gb',0):,.2f} GB
-- Avg Usage Per Customer  : {s.get('postpaid_oct',{}).get('avg_usage_gb',0):.2f} GB
+DATASET 7 - SERVICE USAGE (Individual Customers)
+Files: 16842521631.csv, 16842727621.csv, 16842588009.xlsx
+- Total Records     : {s.get('service_usage',{}).get('total_records',0)}
+- Unique Customers  : {s.get('service_usage',{}).get('unique_customers',0)}
+- Active Records    : {s.get('service_usage',{}).get('active_records',0)}
+- Avg Benefit GB    : {s.get('service_usage',{}).get('avg_benefit_gb',0):.2f} GB
+- Avg Usage GB      : {s.get('service_usage',{}).get('avg_usage_gb',0):.2f} GB
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DATASET 8 — SERVICE USAGE (3 CUSTOMERS, NEW_DATA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Total Records          : {s.get('service_usage',{}).get('total_records',0)}
-- Unique Customers       : {s.get('service_usage',{}).get('unique_customers',0)}
-- Active Records         : {s.get('service_usage',{}).get('active_records',0)}
-- Avg Data Benefit       : {s.get('service_usage',{}).get('avg_benefit_gb',0):.2f} GB
-- Avg Data Usage         : {s.get('service_usage',{}).get('avg_usage_gb',0):.2f} GB
-
-INSTRUCTIONS:
-- Always reference real numbers from the datasets above
-- When asked about app usage (Facebook/YouTube/TikTok), use Dataset 4 or 5
-- When asked about bundle purchases, use Dataset 2 or 3
-- When asked about postpaid customers, use Dataset 6 or 7
-- When asked about churn, use Dataset 1
-- Compare October vs November when trends are asked
-- Give specific, data-driven, actionable answers with bullet points"""
+STRICT RULES:
+1. ONLY use the 7 datasets listed above
+2. NEVER mention IBM dataset or Kaggle in any response
+3. If asked about churn say: Churn data is not available in the provided datasets
+4. Always mention the exact file name when answering
+5. For bundle questions use Dataset 1 and Dataset 2
+6. For app usage questions use Dataset 3 and Dataset 4
+7. For postpaid questions use Dataset 5 and Dataset 6
+8. For individual customer questions use Dataset 7
+9. Always give specific numbers from the data above
+10. When asked which dataset - name the exact file"""
 
     # ── Initialize chat history ───────────────────────
     if "messages" not in st.session_state:
@@ -850,12 +839,15 @@ INSTRUCTIONS:
     if "chat_initialized" not in st.session_state:
         welcome = (
             f"👋 Hello! I'm **TelecomAI** powered by **Llama 3 via Groq**.\n\n"
-            f"I have analyzed your real dataset:\n"
-            f"- 📊 **{TOTAL:,} customers** loaded\n"
-            f"- ⚠️ **{CHURN_RATE:.1f}% churn rate** detected\n"
-            f"- 💰 **${TOTAL_REV:,.0f} monthly revenue** tracked\n"
-            f"- 🤖 **ML models** connected\n\n"
-            f"Ask me anything about packages, churn, revenue, or strategy!"
+            f"I have access to your **7 company datasets**:\n"
+            f"- 📦 Bundle Purchases: **{s.get('bundle_new',{}).get('total_purchases',0):,} records**\n"
+            f"- 📋 Addon Subscriptions: **{s.get('addon',{}).get('total_records',0):,} records**\n"
+            f"- 📱 Data Usage Nov 2025: **{s.get('nov_usage',{}).get('total_customers',0):,} customers**\n"
+            f"- 📱 Data Usage Oct 2025: **{s.get('oct_usage',{}).get('total_customers',0):,} customers**\n"
+            f"- 💼 Postpaid Nov 2025: **{s.get('postpaid_nov',{}).get('total_customers',0):,} customers**\n"
+            f"- 💼 Postpaid Oct 2025: **{s.get('postpaid_oct',{}).get('total_customers',0):,} customers**\n"
+            f"- 🔧 Service Usage: **{s.get('service_usage',{}).get('total_records',0)} records**\n\n"
+            f"Ask me anything about your data!"
         )
         st.session_state.messages.append({
             "role": "assistant",
@@ -864,58 +856,40 @@ INSTRUCTIONS:
         st.session_state.chat_initialized = True
 
     # ── Quick question buttons ────────────────────────
-    st.markdown("**Quick Questions — click any to get instant AI answers:**")
+    st.markdown("**Quick Questions:**")
     col1, col2, col3 = st.columns(3)
     col4, col5, col6 = st.columns(3)
 
     prompt = None
 
-    if col1.button("📦 Best packages to promote"):
-        prompt = "Which packages should we promote next month for maximum revenue? Give specific recommendations based on our customer data."
-
-    if col2.button("⚠️ High churn segments"):
-        prompt = "Who are the highest churn risk customer segments? Include specific percentages from our data."
-
-    if col3.button("💰 Pricing strategy"):
-        prompt = "What is the best pricing strategy for next month to maximize revenue and reduce churn?"
-
-    if col4.button("📊 Heavy data users"):
-        prompt = "Which customer segments use the most data? How should we target them?"
-
-    if col5.button("🔄 How to reduce churn"):
-        prompt = "How can we reduce our churn rate effectively? Give top 3 specific actions with expected impact."
-
-    if col6.button("📈 Revenue prediction"):
-        prompt = "What is the predicted revenue for next month? What factors will drive growth or decline?"
-
-    # ── More questions row ────────────────────────────
-    st.markdown("---")
-    col7, col8, col9 = st.columns(3)
-
-    if col7.button("🎓 Student package strategy"):
-        prompt = "Design the best package strategy for student customers. Include pricing and features."
-
-    if col8.button("🎮 Gamer package strategy"):
-        prompt = "Design the best data package for gamer customers. What features matter most?"
-
-    if col9.button("🏆 Top retention strategies"):
-        prompt = "What are the top 5 customer retention strategies for our telecom company based on our data?"
+    if col1.button("📦 Most popular bundle"):
+        prompt = "Which bundle is most popular and what is the total revenue from it?"
+    if col2.button("📱 Top app by usage"):
+        prompt = "Which app uses the most data in November 2025? Give me the exact GB."
+    if col3.button("💰 Total bundle revenue"):
+        prompt = "What is the total revenue from all bundle purchases combined?"
+    if col4.button("👥 Postpaid customers"):
+        prompt = "How many postpaid customers do we have and what is their total data usage?"
+    if col5.button("📊 Oct vs Nov usage"):
+        prompt = "Compare total data usage between October and November 2025."
+    if col6.button("🔍 Addon subscriptions"):
+        prompt = "What is the breakdown of addon subscriptions by bundle type and channel?"
 
     # ── Display chat history ──────────────────────────
+    st.markdown("---")
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
     # ── Chat input ────────────────────────────────────
     user_input = st.chat_input(
-        "Ask anything — churn, packages, revenue, predictions, strategy..."
+        "Ask anything about your datasets..."
     )
     if user_input:
         prompt = user_input
 
     # ── Process and respond ───────────────────────────
     if prompt:
-        # Show user message
         st.session_state.messages.append({
             "role": "user",
             "content": prompt
@@ -923,41 +897,30 @@ INSTRUCTIONS:
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Get Groq AI response
         with st.chat_message("assistant"):
-            with st.spinner("Llama 3 is thinking..."):
+            with st.spinner("Analyzing your data..."):
                 try:
-                    # Build message history for Groq
-                    # Only include last 10 messages to stay within token limits
                     recent_messages = st.session_state.messages[-10:]
-
                     groq_messages = [
                         {"role": m["role"], "content": m["content"]}
                         for m in recent_messages
                         if m["role"] in ["user", "assistant"]
                     ]
-
                     response = groq_client.chat.completions.create(
                         model="llama-3.3-70b-versatile",
                         messages=[
                             {"role": "system", "content": system_prompt},
                             *groq_messages
                         ],
-                        max_tokens=500,
+                        max_tokens=600,
                         temperature=0.7
                     )
-
                     reply = response.choices[0].message.content
-
                 except Exception as e:
                     reply = (
-                        f"⚠️ **Groq Error:** `{str(e)}`\n\n"
-                        f"**Common fixes:**\n"
-                        f"- Check your `.env` file has: `GROQ_API_KEY=gsk_...`\n"
-                        f"- Make sure you ran: `pip install groq`\n"
-                        f"- Verify your key at console.groq.com"
+                        f"⚠️ Error: `{str(e)}`\n\n"
+                        f"Check your `.env` file has: `GROQ_API_KEY=gsk_...`"
                     )
-
                 st.markdown(reply)
                 st.session_state.messages.append({
                     "role": "assistant",
@@ -974,10 +937,9 @@ INSTRUCTIONS:
             st.rerun()
     with col_info:
         st.caption(
-            f"🤖 Powered by Llama 3 (8B) via Groq API — Free tier "
-            f"| Dataset: {TOTAL:,} customers loaded"
+            f"🤖 Powered by Llama 3 via Groq | "
+            f"Using your 7 company datasets only"
         )
-
 # ════════════════════════════════════════════════════
 # PAGE 4 — REPORTS
 # ════════════════════════════════════════════════════    
