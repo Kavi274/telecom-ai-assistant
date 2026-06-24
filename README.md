@@ -216,3 +216,6 @@ Open your browser at: **http://localhost:8501**
 - Dataset files are excluded from Git — download from Kaggle and place in `data/`
 - Run `model_builder.py` once to generate all model files before running the app
 - The Groq API is free — go to console.groq.com to get your key
+
+## Author
+Kaviya
